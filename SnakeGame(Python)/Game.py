@@ -34,7 +34,7 @@ class SnakeGame:
         self.retry_text = None
 
         self.master.bind("<KeyPress>", self.on_key_press)
-        self.set_fps(10)  # Definindo o framerate inicial
+        self.set_fps(12)  # Definindo o framerate inicial
 
         self.update()
 
