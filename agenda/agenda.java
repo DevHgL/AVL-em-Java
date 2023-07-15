@@ -112,18 +112,20 @@ class Agenda {
         }
     }
 
-    public void recuperarAgenda(String nomeArquivo) {
-        try {
-            FileInputStream fileStream = new FileInputStream(nomeArquivo);
-            ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-            contatos = (List<Contato>) objectStream.readObject();
-            ultimo = contatos.size() - 1;
-            objectStream.close();
-            fileStream.close();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+@SuppressWarnings("unchecked")
+public void recuperarAgenda(String nomeArquivo) {
+    try {
+        FileInputStream fileStream = new FileInputStream(nomeArquivo);
+        ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+        contatos = (List<Contato>) objectStream.readObject();
+        ultimo = contatos.size() - 1;
+        objectStream.close();
+        fileStream.close();
+    } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
     }
+}
+
 
     private boolean contatoExistente(String nome) {
         for (int i = 0; i <= ultimo; i++) {
