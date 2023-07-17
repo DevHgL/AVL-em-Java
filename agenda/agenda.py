@@ -77,7 +77,7 @@ def exibir_menu():  # Define a função exibir_menu
     print("0. Sair")
     print("================")
 
-if __name__ == '_main_':  # Verifica se o código está sendo executado como script principal
+if __name__ == '__main__':  # Verifica se o código está sendo executado como script principal
     agenda = Agenda()  # Cria uma nova instância de Agenda
 
     while True:  # Loop principal do programa
