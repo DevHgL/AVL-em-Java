@@ -97,7 +97,7 @@ class SnakeGame:
                 SCREEN_HEIGHT // 2 - 20,
                 text="GAME OVER",
                 font=("Helvetica", 24),
-                fill="white",
+                fill="black",
             )
 
         if not self.retry_text:
@@ -106,7 +106,7 @@ class SnakeGame:
                 SCREEN_HEIGHT // 2 + 20,
                 text="Press SPACE to retry",
                 font=("Helvetica", 16),
-                fill="white",
+                fill="black",
             )
 
     def restart_game(self):
