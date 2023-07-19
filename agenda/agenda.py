@@ -1,4 +1,6 @@
-import pickle  # Importa o módulo pickle, utilizado para serializar e desserializar objetos Python
+import pickle
+import tkinter as tk
+from tkinter import messagebox
 
 class Contato:
     def _init_(self, nome, telefone, endereco, relacao):  # Define o construtor da classe Contato
@@ -123,3 +125,112 @@ if __name__ == '__main__':  # Verifica se o código está sendo executado como s
             print("Opção inválida. Digite um número válido.")
 
         print()  # Linha em branco para separar as opções
+
+class ContactManagerGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Contact Manager")
+
+        self.agenda = Agenda()
+
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Labels and entry fields for contact details
+        self.label_name = tk.Label(self.root, text="Name:")
+        self.entry_name = tk.Entry(self.root)
+
+        self.label_phone = tk.Label(self.root, text="Phone:")
+        self.entry_phone = tk.Entry(self.root)
+
+        self.label_address = tk.Label(self.root, text="Address:")
+        self.entry_address = tk.Entry(self.root)
+
+        self.label_relation = tk.Label(self.root, text="Relation:")
+        self.entry_relation = tk.Entry(self.root)
+
+        # Buttons to perform actions
+        self.button_search = tk.Button(self.root, text="Search Contact", command=self.search_contact)
+        self.button_add_update = tk.Button(self.root, text="Add/Update Contact", command=self.add_update_contact)
+        self.button_remove = tk.Button(self.root, text="Remove Contact", command=self.remove_contact)
+        self.button_list = tk.Button(self.root, text="List Contacts", command=self.list_contacts)
+        self.button_save = tk.Button(self.root, text="Save Agenda", command=self.save_agenda)
+        self.button_load = tk.Button(self.root, text="Load Agenda", command=self.load_agenda)
+        self.button_exit = tk.Button(self.root, text="Exit", command=self.root.quit)
+
+        # Layout using grid
+        self.label_name.grid(row=0, column=0, padx=5, pady=5)
+        self.entry_name.grid(row=0, column=1, padx=5, pady=5)
+
+        self.label_phone.grid(row=1, column=0, padx=5, pady=5)
+        self.entry_phone.grid(row=1, column=1, padx=5, pady=5)
+
+        self.label_address.grid(row=2, column=0, padx=5, pady=5)
+        self.entry_address.grid(row=2, column=1, padx=5, pady=5)
+
+        self.label_relation.grid(row=3, column=0, padx=5, pady=5)
+        self.entry_relation.grid(row=3, column=1, padx=5, pady=5)
+
+        self.button_search.grid(row=4, column=0, padx=5, pady=5)
+        self.button_add_update.grid(row=4, column=1, padx=5, pady=5)
+        self.button_remove.grid(row=4, column=2, padx=5, pady=5)
+        self.button_list.grid(row=5, column=0, padx=5, pady=5)
+        self.button_save.grid(row=5, column=1, padx=5, pady=5)
+        self.button_load.grid(row=5, column=2, padx=5, pady=5)
+        self.button_exit.grid(row=6, column=0, columnspan=3, padx=5, pady=10)
+
+    def search_contact(self):
+        name = self.entry_name.get().strip()
+        if name:
+            contact = self.agenda.buscar_contato(name)
+            if contact:
+                messagebox.showinfo("Contact Found", str(contact))
+            else:
+                messagebox.showinfo("Contact Not Found", "No contact found with the given name.")
+        else:
+            messagebox.showwarning("Missing Information", "Please enter a name to search.")
+
+    def add_update_contact(self):
+        name = self.entry_name.get().strip()
+        phone = self.entry_phone.get().strip()
+        address = self.entry_address.get().strip()
+        relation = self.entry_relation.get().strip()
+
+        if name:
+            self.agenda.inserir_alterar_contato(name, phone, address, relation)
+            messagebox.showinfo("Success", "Contact added/updated successfully.")
+        else:
+            messagebox.showwarning("Missing Information", "Please enter a name to add/update contact.")
+
+    def remove_contact(self):
+        name = self.entry_name.get().strip()
+        if name:
+            self.agenda.remover_contato(name)
+            messagebox.showinfo("Success", "Contact removed successfully.")
+        else:
+            messagebox.showwarning("Missing Information", "Please enter a name to remove contact.")
+
+    def list_contacts(self):
+        contacts = self.agenda.contatos
+        if contacts:
+            contact_list = "\n".join(str(contact) for contact in contacts)
+            messagebox.showinfo("Contact List", contact_list)
+        else:
+            messagebox.showinfo("Contact List", "No contacts in the agenda.")
+
+    def save_agenda(self):
+        file_name = tk.filedialog.asksaveasfilename(defaultextension=".dat", filetypes=[("Data Files", "*.dat")])
+        if file_name:
+            self.agenda.salvar_agenda(file_name)
+            messagebox.showinfo("Success", "Agenda saved successfully.")
+
+    def load_agenda(self):
+        file_name = tk.filedialog.askopenfilename(filetypes=[("Data Files", "*.dat")])
+        if file_name:
+            self.agenda = Agenda.carregar_agenda(file_name)
+            messagebox.showinfo("Success", "Agenda loaded successfully.")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ContactManagerGUI(root)
+    root.mainloop()
